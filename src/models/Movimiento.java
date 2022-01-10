@@ -15,8 +15,22 @@ public class Movimiento {
 	public Estado aplicaEstado;
 	public int power;
 
-	public Movimiento(String nombre, TipoPokemon tipo, int maxPP,int cambiaAttack,
-			int cambiaDef, int cambiaSpAttack, int cambiaSpDef, int cambiaSpeed, Estado aplicaEstado, int power) {
+	/**
+	 * Constructor de la clase Movimiento
+	 * 
+	 * @param nombre
+	 * @param tipo
+	 * @param maxPP
+	 * @param cambiaAttack
+	 * @param cambiaDef
+	 * @param cambiaSpAttack
+	 * @param cambiaSpDef
+	 * @param cambiaSpeed
+	 * @param aplicaEstado
+	 * @param power
+	 */
+	public Movimiento(String nombre, TipoPokemon tipo, int maxPP, int cambiaAttack, int cambiaDef, int cambiaSpAttack,
+			int cambiaSpDef, int cambiaSpeed, Estado aplicaEstado, int power) {
 		super();
 		this.nombre = nombre;
 		this.tipo = tipo;

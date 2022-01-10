@@ -22,6 +22,22 @@ public class Pokemon {
 	public int actualHP;
 	public int level;
 
+	/**
+	 * Constructor de la clase Pokemon
+	 * 
+	 * @param numero
+	 * @param nombre
+	 * @param tipo1
+	 * @param tipo2
+	 * @param attack
+	 * @param defense
+	 * @param specialAttack
+	 * @param specialDefense
+	 * @param speed
+	 * @param maxHP
+	 * @param level
+	 * @param estado
+	 */
 	public Pokemon(int numero, String nombre, TipoPokemon tipo1, TipoPokemon tipo2, int attack, int defense,
 			int specialAttack, int specialDefense, int speed, int maxHP, int level, Estado estado) {
 		super();
@@ -154,26 +170,31 @@ public class Pokemon {
 		this.level = level;
 	}
 
+	/**
+	 * Recoge el dato introducido por pantalla del movimiento que se quiere realizar
+	 * 
+	 * @return
+	 */
 	public Movimiento elegirMovimiento() {
 
 		int i = 1;
-		boolean opVal=true;
+		boolean opVal = true;
 		do {
-			opVal=true;
+			opVal = true;
 			try {
 				System.out.println("¿Qué quieres que haga " + this.nombre + "?:");
 				mostrarMovimentos();
 				i = Integer.parseInt(sc.nextLine());
 			} catch (Exception e) {
-				opVal=false;
+				opVal = false;
 				System.out.println("Elige un movimiento de la lista.");
 			}
-			
-			if(i<=0 || i>movimientos.size()) {
+
+			if (i <= 0 || i > movimientos.size()) {
 				System.out.println("No es un movimiento de la lista");
-				opVal=false;
+				opVal = false;
 			}
-			
+
 		} while (!opVal);
 		i--;
 		Movimiento m = this.movimientos.get(i);
@@ -181,6 +202,9 @@ public class Pokemon {
 		return m;
 	}
 
+	/**
+	 * Muestra una lista con los movimientos propios del pokemon
+	 */
 	public void mostrarMovimentos() {
 		int i = 1;
 		for (Movimiento m : this.movimientos) {
