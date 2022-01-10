@@ -56,12 +56,13 @@ public class Combate {
 	}
 
 	/**
-	 * Establece el primer pokemon que ataca al inicar el combate
+	 * Establece el pokemon que realiza el primer movimiento
 	 * 
-	 * @return el primer pokemon en atacar
+	 * @return el primer pokemon en moverse
 	 */
 	public Pokemon quienEmpiezaTurno(int contPokE1, int contPokE2) {
 
+		// Se estalece mediante la velocidad
 		if (pokemon1.speed >= pokemon2.speed) {
 			System.out.println("Es el turno de " + entrenador1.nombre);
 			return entrenador1.equipo.equipo.get(contPokE1);
@@ -72,6 +73,18 @@ public class Combate {
 
 	}
 
+	/**
+	 * Se elige un movimiento dependiendo de quien sea el más rápido
+	 * 
+	 * @param contTurnos
+	 * @param contEnv
+	 * @param contDormido
+	 * @param contCong
+	 * @param contPokE1
+	 * @param contPokE2
+	 * @param pok1V
+	 * @param pok2V
+	 */
 	public void aplicarMovimiento(int contTurnos, int contEnv, int contDormido, int contCong, int contPokE1,
 			int contPokE2, boolean pok1V, boolean pok2V) {
 
@@ -132,8 +145,7 @@ public class Combate {
 					break;
 				}
 
-				// Si no ha salido la probabilidad de que al estar paralizado no ataque puede
-				// realizar su movimiento
+				// Se mueve si no sale la probabilidad al estar paralizado, dormido o congelado
 				if (!noMov) {
 					if (m.power > 0) {
 						calcularDanio(pokemon1, pokemon2, m);
@@ -146,7 +158,7 @@ public class Combate {
 
 					pok2V = estaVivo(pokemon2);
 
-//----------------- //// Turno del otro pokemon de hacer un movimiento //
+//---------------------- Turno del otro pokemon de hacer un movimiento //
 					if (pok2V) {
 						m = pokemon2.elegirMovimiento();
 						System.out.println(pokemon2.nombre + " realiza el movimiento " + m.nombre);
@@ -203,8 +215,7 @@ public class Combate {
 							break;
 						}
 
-						// Si no ha salido la probabilidad de que al estar paralizado no ataque puede
-						// realizar su movimiento
+						// Se mueve si no sale la probabilidad al estar paralizado, dormido o congelado
 						if (!noMov2) {
 							if (m.power > 0) {
 								calcularDanio(pokemon2, pokemon1, m);
@@ -223,6 +234,7 @@ public class Combate {
 				Movimiento m = this.pokemon2.elegirMovimiento();
 				System.out.println(this.pokemon2.nombre + " realiza el movimiento " + m.nombre);
 				boolean noMov = false;
+
 				// Estados en los que se puede encontrar el pokemon atacante
 				switch (this.pokemon2.estado.nombre) {
 				case "Paralizado":
@@ -273,8 +285,7 @@ public class Combate {
 					break;
 				}
 
-				// Si no ha salido la probabilidad de que al estar paralizado no ataque puede
-				// realizar su movimiento
+				// Se mueve si no sale la probabilidad al estar paralizado, dormido o congelado
 				if (!noMov) {
 					if (m.power > 0) {
 						calcularDanio(this.pokemon2, this.pokemon1, m);
@@ -291,7 +302,7 @@ public class Combate {
 
 				pok1V = estaVivo(pokemon1);
 
-//----------------- //// Turno del otro pokemon de hacer un movimiento //
+//---------------------- Turno del otro pokemon de hacer un movimiento //
 				if (pok1V) {
 					m = this.pokemon1.elegirMovimiento();
 					System.out.println(this.pokemon1.nombre + " realiza el movimiento " + m.nombre);
@@ -348,8 +359,7 @@ public class Combate {
 						break;
 					}
 
-					// Si no ha salido la probabilidad de que al estar paralizado no ataque puede
-					// realizar su movimiento
+					// Se mueve si no sale la probabilidad al estar paralizado, dormido o congelado
 					if (!noMov2) {
 						if (m.power > 0) {
 							calcularDanio(this.pokemon1, this.pokemon2, m);
@@ -367,10 +377,15 @@ public class Combate {
 		}
 	}
 
+	/**
+	 * Comprueba que todos los pokemons de ambos entrenadores esten vivos. Si no hay
+	 * ninguno vivo en alguno devuelve true y termina la batalla
+	 * 
+	 * @return
+	 */
 	public boolean isFinished() {
 		boolean termina = true;
 		int i = 0;
-		int tamanio = entrenador1.equipo.equipo.size();
 		while (termina && i < entrenador1.equipo.equipo.size()) {
 			Pokemon p = entrenador1.equipo.equipo.get(i);
 			if (p.actualHP > 0) {
@@ -399,6 +414,13 @@ public class Combate {
 		return termina;
 	}
 
+	/**
+	 * Calcula el daño que recibe el pokemon al ser atacado
+	 * 
+	 * @param atacante
+	 * @param defensor
+	 * @param m
+	 */
 	public void calcularDanio(Pokemon atacante, Pokemon defensor, Movimiento m) {
 		double efecT1 = m.getEfectividad(defensor.tipo1);
 		double efecT2 = m.getEfectividad(defensor.tipo2);
@@ -422,6 +444,13 @@ public class Combate {
 		System.out.println("Le ha quitado " + m.damage + " PS");
 	}
 
+	/**
+	 * Establece todos los cambios que pueden ocurrirle a un pokemon al ser atacado
+	 * con algunos movimientos
+	 * 
+	 * @param p
+	 * @param m
+	 */
 	public void cambiosRealizados(Pokemon p, Movimiento m) {
 		if (m.cambiaAttack != 0) {
 			System.out.println("¡El ataque de " + p.nombre + " ha disminuido en " + m.cambiaAttack + "!");
@@ -445,6 +474,12 @@ public class Combate {
 		}
 	}
 
+	/**
+	 * Establece un estado a un pokemon después de ser atacado por ciertos movimientos
+	 * 
+	 * @param p pokemon afectado
+	 * @param m movimiento que realiza el atacante
+	 */
 	public void aplicarEstadoPok(Pokemon p, Movimiento m) {
 		switch (m.aplicaEstado.nombre) {
 		case "Paralizado":
@@ -473,6 +508,12 @@ public class Combate {
 		}
 	}
 
+	/**
+	 * Comprueba que el pokemon sigue vivo
+	 * 
+	 * @param p
+	 * @return
+	 */
 	public boolean estaVivo(Pokemon p) {
 		if (p.actualHP <= 0) {
 			return false;

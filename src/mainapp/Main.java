@@ -102,7 +102,9 @@ public class Main {
 		while (!c.isFinished()) {
 			boolean pok1V = true;
 			boolean pok2V = true;
-			if (contPokE1 < e1.equipo.equipo.size() -1 && e1.equipo.equipo.get(contPokE1).actualHP <= 0) {
+
+			// Comprobamos que los pokemons siguen vivos para poder luchar
+			if (contPokE1 < e1.equipo.equipo.size() - 1 && e1.equipo.equipo.get(contPokE1).actualHP <= 0) {
 				System.out.println(e1.equipo.equipo.get(contPokE1).nombre + " se ha debilitado");
 				contPokE1++;
 				System.out.println("Ahora luchará " + e1.equipo.equipo.get(contPokE1).nombre);
@@ -125,6 +127,8 @@ public class Main {
 				System.out.println("El combate ha terminado");
 				pok2V = false;
 			}
+
+			// Se realiza el combate
 			c.quienEmpiezaTurno(contPokE1, contPokE2);
 			c.aplicarMovimiento(contTurnos, contEnv, contDormido, contCong, contPokE1, contPokE2, pok1V, pok2V);
 			c.pokemon1 = e1.equipo.equipo.get(contPokE1);
