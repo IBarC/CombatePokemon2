@@ -169,7 +169,7 @@ public class Pokemon {
 				System.out.println("Elige un movimiento de la lista.");
 			}
 			
-			if(i<1 || i>=movimientos.size()) {
+			if(i<=0 || i>movimientos.size()) {
 				System.out.println("No es un movimiento de la lista");
 				opVal=false;
 			}

@@ -144,72 +144,76 @@ public class Combate {
 					aplicarEstadoPok(pokemon2, m);
 					System.out.println("PS de " + pokemon2.nombre + "=" + pokemon2.actualHP);
 
-					// Turno del otro pokemon de hacer un movimiento //
-					m = pokemon2.elegirMovimiento();
-					System.out.println(pokemon2.nombre + " realiza el movimiento " + m.nombre);
-					boolean noMov2 = false;
+					pok2V = estaVivo(pokemon2);
 
-					// Estados en los que se puede encontrar el pokemon atacante
-					switch (pokemon1.estado.nombre) {
-					case "Paralizado":
-						int random = (int) (Math.random() * 4);
-						if (random == 0) {
-							System.out.println(pokemon2.nombre + " está paralizado y no se puede mover");
-							noMov2 = true;
+//----------------- //// Turno del otro pokemon de hacer un movimiento //
+					if (pok2V) {
+						m = pokemon2.elegirMovimiento();
+						System.out.println(pokemon2.nombre + " realiza el movimiento " + m.nombre);
+						boolean noMov2 = false;
+
+						// Estados en los que se puede encontrar el pokemon atacante
+						switch (pokemon1.estado.nombre) {
+						case "Paralizado":
+							int random = (int) (Math.random() * 4);
+							if (random == 0) {
+								System.out.println(pokemon2.nombre + " está paralizado y no se puede mover");
+								noMov2 = true;
+							}
+							break;
+
+						case "Quemado":
+							System.out.println(
+									pokemon2.nombre + " está quemado y pierde " + (pokemon2.actualHP / 16) + " PS");
+							pokemon2.actualHP -= pokemon2.actualHP / 16;
+							break;
+
+						case "Envenenado":
+							contEnv++;
+							System.out.println(
+									pokemon2.nombre + " está envenenado y pierde " + (pokemon2.actualHP / 8) + " PS");
+							pokemon2.actualHP -= pokemon1.actualHP / 8;
+							if (contTurnos % contEnv == 0) {
+								pokemon2.actualHP -= 1;
+							}
+							break;
+
+						case "Dormido":
+							contDormido++;
+							if (contDormido < 7) {
+								System.out.println(pokemon2.nombre + " está dormido y no puede atacar");
+								noMov = true;
+							} else {
+								pokemon1.estado.nombre = "Ninguno";
+								System.out.println(pokemon2.nombre + " se ha despertado.");
+							}
+							break;
+
+						case "Congelado":
+							contCong++;
+							if (contCong < 3) {
+								System.out.println(pokemon2.nombre + " está congelado y no puede atacar");
+								noMov = true;
+							} else {
+								pokemon2.estado.nombre = "Ninguno";
+								System.out.println(pokemon1.nombre + " se ha descongelado");
+							}
+							break;
+						case "Ninguno":
+							break;
 						}
-						break;
 
-					case "Quemado":
-						System.out.println(
-								pokemon2.nombre + " está quemado y pierde " + (pokemon2.actualHP / 16) + " PS");
-						pokemon2.actualHP -= pokemon2.actualHP / 16;
-						break;
-
-					case "Envenenado":
-						contEnv++;
-						System.out.println(
-								pokemon2.nombre + " está envenenado y pierde " + (pokemon2.actualHP / 8) + " PS");
-						pokemon2.actualHP -= pokemon1.actualHP / 8;
-						if (contTurnos % contEnv == 0) {
-							pokemon2.actualHP -= 1;
+						// Si no ha salido la probabilidad de que al estar paralizado no ataque puede
+						// realizar su movimiento
+						if (!noMov2) {
+							if (m.power > 0) {
+								calcularDanio(pokemon2, pokemon1, m);
+							}
+							cambiosRealizados(pokemon2, m);
+							aplicarEstadoPok(pokemon2, m);
 						}
-						break;
-
-					case "Dormido":
-						contDormido++;
-						if (contDormido < 7) {
-							System.out.println(pokemon2.nombre + " está dormido y no puede atacar");
-							noMov = true;
-						} else {
-							pokemon1.estado.nombre = "Ninguno";
-							System.out.println(pokemon2.nombre + " se ha despertado.");
-						}
-						break;
-
-					case "Congelado":
-						contCong++;
-						if (contCong < 3) {
-							System.out.println(pokemon2.nombre + " está congelado y no puede atacar");
-							noMov = true;
-						} else {
-							pokemon2.estado.nombre = "Ninguno";
-							System.out.println(pokemon1.nombre + " se ha descongelado");
-						}
-						break;
-					case "Ninguno":
-						break;
+						System.out.println("PS de " + pokemon1.nombre + "=" + pokemon1.actualHP);
 					}
-
-					// Si no ha salido la probabilidad de que al estar paralizado no ataque puede
-					// realizar su movimiento
-					if (!noMov2) {
-						if (m.power > 0) {
-							calcularDanio(pokemon2, pokemon1, m);
-						}
-						cambiosRealizados(pokemon2, m);
-						aplicarEstadoPok(pokemon2, m);
-					}
-					System.out.println("PS de " + pokemon1.nombre + "=" + pokemon1.actualHP);
 				}
 			}
 
@@ -285,104 +289,106 @@ public class Combate {
 				}
 				System.out.println("PS de " + this.pokemon1.nombre + "=" + this.pokemon1.actualHP);
 
-				//
-				// Realiza el movimiento el pokemon1
-				//
+				pok1V = estaVivo(pokemon1);
 
-				m = this.pokemon1.elegirMovimiento();
-				System.out.println(this.pokemon1.nombre + " realiza el movimiento " + m.nombre);
-				boolean noMov2 = false;
+//----------------- //// Turno del otro pokemon de hacer un movimiento //
+				if (pok1V) {
+					m = this.pokemon1.elegirMovimiento();
+					System.out.println(this.pokemon1.nombre + " realiza el movimiento " + m.nombre);
+					boolean noMov2 = false;
 
-				// Estados en los que se puede encontrar el pokemon atacante
-				switch (this.pokemon1.estado.nombre) {
-				case "Paralizado":
-					int random = (int) (Math.random() * 4);
-					if (random == 0) {
-						System.out.println(this.pokemon1.nombre + " está paralizado y no se puede mover");
-						noMov2 = true;
+					// Estados en los que se puede encontrar el pokemon atacante
+					switch (this.pokemon1.estado.nombre) {
+					case "Paralizado":
+						int random = (int) (Math.random() * 4);
+						if (random == 0) {
+							System.out.println(this.pokemon1.nombre + " está paralizado y no se puede mover");
+							noMov2 = true;
+						}
+						break;
+
+					case "Quemado":
+						System.out.println(this.pokemon1.nombre + " está quemado y pierde "
+								+ (this.pokemon1.actualHP / 16) + " PS");
+						this.pokemon1.actualHP -= this.pokemon1.actualHP / 16;
+						break;
+
+					case "Envenenado":
+						contEnv++;
+						System.out.println(this.pokemon1.nombre + " está envenenado y pierde "
+								+ (this.pokemon1.actualHP / 8) + " PS");
+						this.pokemon1.actualHP -= this.pokemon1.actualHP / 8;
+						if (contTurnos % contEnv == 0) {
+							this.pokemon1.actualHP -= 1;
+						}
+						break;
+
+					case "Dormido":
+						contDormido++;
+						if (contDormido < 7) {
+							System.out.println(this.pokemon1.nombre + " está dormido y no puede atacar");
+							noMov2 = true;
+						} else {
+							this.pokemon1.estado.nombre = "Ninguno";
+							System.out.println(this.pokemon1.nombre + " se ha despertado.");
+						}
+						break;
+
+					case "Congelado":
+						contCong++;
+						if (contCong < 3) {
+							System.out.println(this.pokemon1.nombre + " está congelado y no puede atacar");
+							noMov2 = true;
+						} else {
+							this.pokemon1.estado.nombre = "Ninguno";
+							System.out.println(this.pokemon1.nombre + " se ha descongelado");
+						}
+						break;
+					case "Ninguno":
+						break;
 					}
-					break;
 
-				case "Quemado":
-					System.out.println(
-							this.pokemon1.nombre + " está quemado y pierde " + (this.pokemon1.actualHP / 16) + " PS");
-					this.pokemon1.actualHP -= this.pokemon1.actualHP / 16;
-					break;
+					// Si no ha salido la probabilidad de que al estar paralizado no ataque puede
+					// realizar su movimiento
+					if (!noMov2) {
+						if (m.power > 0) {
+							calcularDanio(this.pokemon1, this.pokemon2, m);
+						}
 
-				case "Envenenado":
-					contEnv++;
-					System.out.println(
-							this.pokemon1.nombre + " está envenenado y pierde " + (this.pokemon1.actualHP / 8) + " PS");
-					this.pokemon1.actualHP -= this.pokemon1.actualHP / 8;
-					if (contTurnos % contEnv == 0) {
-						this.pokemon1.actualHP -= 1;
+						// Todos los cambios que puede realizar el movimiento
+						cambiosRealizados(this.pokemon2, m);
+
+						// Estado que se le puede aplicar con el movimiento al pokemon atacado
+						aplicarEstadoPok(this.pokemon2, m);
 					}
-					break;
-
-				case "Dormido":
-					contDormido++;
-					if (contDormido < 7) {
-						System.out.println(this.pokemon1.nombre + " está dormido y no puede atacar");
-						noMov2 = true;
-					} else {
-						this.pokemon1.estado.nombre = "Ninguno";
-						System.out.println(this.pokemon1.nombre + " se ha despertado.");
-					}
-					break;
-
-				case "Congelado":
-					contCong++;
-					if (contCong < 3) {
-						System.out.println(this.pokemon1.nombre + " está congelado y no puede atacar");
-						noMov2 = true;
-					} else {
-						this.pokemon1.estado.nombre = "Ninguno";
-						System.out.println(this.pokemon1.nombre + " se ha descongelado");
-					}
-					break;
-				case "Ninguno":
-					break;
+					System.out.println("PS de " + this.pokemon2.nombre + "=" + pokemon2.actualHP);
 				}
-
-				// Si no ha salido la probabilidad de que al estar paralizado no ataque puede
-				// realizar su movimiento
-				if (!noMov2) {
-					if (m.power > 0) {
-						calcularDanio(this.pokemon1, this.pokemon2, m);
-					}
-
-					// Todos los cambios que puede realizar el movimiento
-					cambiosRealizados(this.pokemon2, m);
-
-					// Estado que se le puede aplicar con el movimiento al pokemon atacado
-					aplicarEstadoPok(this.pokemon2, m);
-				}
-				System.out.println("PS de " + this.pokemon2.nombre + "=" + pokemon2.actualHP);
 			}
 		}
 	}
 
 	public boolean isFinished() {
-		boolean termina = false;
-		for (Pokemon p : entrenador1.equipo.equipo) {
-			if (p.actualHP != 0) {
+		boolean termina = true;
+		int i = 0;
+		int tamanio = entrenador1.equipo.equipo.size();
+		while (termina && i < entrenador1.equipo.equipo.size()) {
+			Pokemon p = entrenador1.equipo.equipo.get(i);
+			if (p.actualHP > 0) {
 				termina = false;
-				break;
-			} else {
-				termina = true;
 			}
+			i++;
 		}
 		if (termina) {
 			System.out.println("Todos los pokemon de " + entrenador1.nombre + " se han debilitado.\nEl ganador es "
 					+ entrenador2.nombre);
 		} else {
-			for (Pokemon p : entrenador2.equipo.equipo) {
-				if (p.actualHP != 0) {
+			i = 0;
+			while (termina && i < entrenador2.equipo.equipo.size()) {
+				Pokemon p = entrenador2.equipo.equipo.get(i);
+				if (p.actualHP > 0) {
 					termina = false;
-					break;
-				} else {
-					termina = true;
 				}
+				i++;
 			}
 			if (termina) {
 				System.out.println("Todos los pokemon de " + entrenador2.nombre + " se han debilitado.\nEl ganador es "
@@ -464,6 +470,14 @@ public class Combate {
 			System.out.println("¡" + p.nombre + " ha sido congelado!");
 			p.estado.nombre = "Congelado";
 			break;
+		}
+	}
+
+	public boolean estaVivo(Pokemon p) {
+		if (p.actualHP <= 0) {
+			return false;
+		} else {
+			return true;
 		}
 	}
 }

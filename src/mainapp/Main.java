@@ -102,7 +102,7 @@ public class Main {
 		while (!c.isFinished()) {
 			boolean pok1V = true;
 			boolean pok2V = true;
-			if (contPokE1 < e1.equipo.equipo.size() && e1.equipo.equipo.get(contPokE1).actualHP <= 0) {
+			if (contPokE1 < e1.equipo.equipo.size() -1 && e1.equipo.equipo.get(contPokE1).actualHP <= 0) {
 				System.out.println(e1.equipo.equipo.get(contPokE1).nombre + " se ha debilitado");
 				contPokE1++;
 				System.out.println("Ahora luchará " + e1.equipo.equipo.get(contPokE1).nombre);
@@ -111,6 +111,7 @@ public class Main {
 			if (contPokE1 == e1.equipo.equipo.size() - 1 && e1.equipo.equipo.get(contPokE1).actualHP <= 0) {
 				System.out.println(e1.equipo.equipo.get(contPokE1).nombre + " se ha debilitado");
 				System.out.println("El combate ha terminado");
+				pok1V = false;
 			}
 
 			if (contPokE2 < e2.equipo.equipo.size() && e2.equipo.equipo.get(contPokE2).actualHP <= 0) {
@@ -122,6 +123,7 @@ public class Main {
 			if (contPokE2 == e2.equipo.equipo.size() - 1 && e2.equipo.equipo.get(contPokE2).actualHP <= 0) {
 				System.out.println(e1.equipo.equipo.get(contPokE1).nombre + " se ha debilitado");
 				System.out.println("El combate ha terminado");
+				pok2V = false;
 			}
 			c.quienEmpiezaTurno(contPokE1, contPokE2);
 			c.aplicarMovimiento(contTurnos, contEnv, contDormido, contCong, contPokE1, contPokE2, pok1V, pok2V);
@@ -131,31 +133,6 @@ public class Main {
 			contTurnos++;
 		}
 
-		boolean termina = false;
-		for (Pokemon p : e1.equipo.equipo) {
-			if (p.actualHP != 0) {
-				termina = false;
-				break;
-			} else {
-				termina = true;
-			}
-		}
-		if (termina) {
-			System.out.println("Todos los pokemon de " + e1.nombre + " se han debilitado.\nEl ganador es " + e2.nombre);
-		} else {
-			for (Pokemon p : e2.equipo.equipo) {
-				if (p.actualHP != 0) {
-					termina = false;
-					break;
-				} else {
-					termina = true;
-				}
-			}
-			if (termina) {
-				System.out.println(
-						"Todos los pokemon de " + e2.nombre + " se han debilitado.\nEl ganador es " + e1.nombre);
-			}
-		}
 	}
 
 }
